@@ -1,0 +1,3 @@
+This project sync's my youtube playlist with a local mp3 playlist.
+
+It takes a youtube username as input, fetches all it's playlists and then downloads all songs in an mp3-format
