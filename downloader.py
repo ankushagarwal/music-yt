@@ -14,7 +14,12 @@ def download_video(video_id):
       if line.endswith('has already been downloaded'):
         return line.split('[download]')[1].split('has already been downloaded')[0].strip()
 
+def mp3_encode(m4a_file):
+  mp4_file = m4a_file.replace(".m4a", ".mp3")
+  p = subprocess.call(["ffmpeg", "-i", m4a_file, mp4_file])
+  return mp4_file
+
 
 if __name__ == '__main__':
-  print "Filename = " + download_video("SiUkZhz06aA")
+  print "Filename = " + mp3_encode(download_video("SiUkZhz06aA"))
 
