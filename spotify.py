@@ -3,7 +3,6 @@ import secret
 import json
 import spotipy
 
-
 def filter_keywords_from_title(title):
     keywords = [  r"(\(\s*official video\s*\))",
                   r"(\[\s*official video\s*\])",
@@ -34,12 +33,14 @@ def filter_keywords_from_title(title):
     return title
 
 def get_track_meta_data(track_name):
-  result = {}
+  track_name = filter_keywords_from_title(track_name)
   sp = spotipy.Spotify()
   search_result = sp.search(track_name, limit = 1)['tracks']['items'][0]
+  return search_result
 
-
-
+def get_album(album_id):
+  sp = spotipy.Spotify()
+  return sp.album(album_id)
 
 if __name__ == '__main__':
   print filter_keywords_from_title("David Guetta - She Wolf (Falling To Pieces) ft. Sia (Official Video)")
