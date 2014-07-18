@@ -12,7 +12,7 @@ except Exception, e:
 BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 channel_id="UCJZqoipdcouSv7n-1aW1Zwg"
-api_key=secret.api_key
+api_key=secret.youtube_api_key
 
 def get_list_of_playlists():
   playlist_list = []
