@@ -1,2 +1,5 @@
 youtube-dl==2014.07.15
 requests==2.3.0
+SpotipyWebApi
+simplejson
+mutagen>=1.23
