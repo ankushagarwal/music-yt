@@ -35,6 +35,15 @@ def add_album_art(file_name, album_art_url):
   )
   audio.save()
 
+def set_video_name(mp3_file, video_id):
+  audio = EasyID3(mp3_file)
+  audio['musicbrainz_albumtype'] = video_id
+  audio.save()
+
+def get_video_name(mp3_file):
+  audio = EasyID3(mp3_file)
+  return audio['musicbrainz_albumtype']
+
 def add_all_tags(mp3_file):
   logging.info("Adding tags to " + mp3_file)
   track_name = mp3_file.split('/')[-1]
