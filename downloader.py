@@ -1,12 +1,14 @@
 import subprocess
+import logging
+import sys
 
 youtube_url = "https://www.youtube.com/watch?v="
 
 def download_video(video_id):
+  logging.info("Downloading video : " + video_id)
   url = youtube_url + video_id
   p = subprocess.Popen(["youtube-dl", "-f", "bestaudio", "-o", "/tmp/music/%(title)s.%(ext)s", url], stdout=subprocess.PIPE)
   result = p.communicate()[0]
-
   if p.returncode == 0:
     for line in result.split("\n"):
       if line.startswith('[download] Destination:'):
@@ -16,7 +18,8 @@ def download_video(video_id):
 
 def mp3_encode(m4a_file):
   mp3_file = m4a_file.replace(".m4a", ".mp3")
-  p = subprocess.call(["ffmpeg", "-i", m4a_file, mp3_file])
+  logging.info("mp3 encoding : " + m4a_file)
+  p = subprocess.call(["ffmpeg", "-y", "-i", m4a_file, mp3_file], stderr=subprocess.PIPE)
   return mp3_file
 
 

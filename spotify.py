@@ -2,6 +2,7 @@ import re
 import secret
 import json
 import spotipy
+import logging
 
 def filter_keywords_from_title(title):
     keywords = [  r"(\(\s*official video\s*\))",
@@ -25,6 +26,8 @@ def filter_keywords_from_title(title):
                   r"(\[\s*official\s*\])",
                   r"(\(\s*audio\s*\))",
                   r"(\[\s*audio\s*\])",
+                  r"(\(.*\))",
+                  r"(\[.*\])",
                   r"(-)",
                     ]
     p = re.compile('|'.join(keywords), re.IGNORECASE)
@@ -32,11 +35,32 @@ def filter_keywords_from_title(title):
       title = p.subn(' ', title)[0].strip()
     return title
 
+def remove_ft(title):
+  threshold = (len(title))*0.25
+  index = title.lower().find("ft")
+  if index <= threshold:
+    return title
+  else:
+    return title[:index]
+
 def get_track_meta_data(track_name):
+  original_track_name = track_name
+  logging.info("Fetching track metadata for track : " + track_name)
   track_name = filter_keywords_from_title(track_name)
   sp = spotipy.Spotify()
-  search_result = sp.search(track_name, limit = 1)['tracks']['items'][0]
-  return search_result
+  try:
+    search_result = sp.search(track_name, limit = 1)['tracks']['items'][0]
+    return search_result
+  except Exception, e:
+    track_without_ft = remove_ft(track_name)
+    logging.info("Failed to get any results with : " + track_name + " Retrying with "
+                  + track_without_ft)
+    try:
+      search_result = sp.search(track_without_ft, limit = 1)['tracks']['items'][0]
+      return search_result
+    except Exception, e:
+      logging.info("Still nothing for " + track_without_ft)
+      return None
 
 def get_album(album_id):
   sp = spotipy.Spotify()
